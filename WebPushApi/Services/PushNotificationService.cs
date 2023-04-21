@@ -36,10 +36,10 @@ public class PushNotificationService
         {
             var pushSubscription = new PushSubscription
             {
-                Endpoint = subscription.Url
+                Endpoint = subscription.Endpoint
             };
-            pushSubscription.SetKey(PushEncryptionKeyName.P256DH, subscription.P256dh);
-            pushSubscription.SetKey(PushEncryptionKeyName.Auth, subscription.Auth);
+            pushSubscription.SetKey(PushEncryptionKeyName.P256DH, subscription.Keys.P256dh);
+            pushSubscription.SetKey(PushEncryptionKeyName.Auth, subscription.Keys.Auth);
 
             var pushMessage = new PushMessage(JsonSerializer.Serialize(payload))
             {
