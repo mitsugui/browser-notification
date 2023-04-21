@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/8c754d5a-e683-4eda-9b00-681c5868e1d6/resourceGroups/ServicoNotificacoes/providers/Microsoft.Web/sites/notificacao-windows",
+    "appService.deploySubpath": "bin\\Publish"
+}

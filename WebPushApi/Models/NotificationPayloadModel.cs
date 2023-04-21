@@ -1,0 +1,1 @@
+public record NotificationPayloadModel(string Title, string Body);

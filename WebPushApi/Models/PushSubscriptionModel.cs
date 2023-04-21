@@ -1,0 +1,1 @@
+public record PushSubscriptionModel(string Url, string P256dh, string Auth);
