@@ -20,7 +20,7 @@ document.getElementById('subscribe').addEventListener('click', async () => {
         });
   
         // Enviar a inscrição para o seu servidor
-        const response = await fetch('https://localhost:5014/subscribe', {
+        const response = await fetch('https://notificacao-windows.azurewebsites.net/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(subscription)
