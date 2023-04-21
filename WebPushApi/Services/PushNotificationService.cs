@@ -4,15 +4,15 @@ using Lib.Net.Http.WebPush.Authentication;
 
 public class PushNotificationService
 {
-    private readonly List<PushSubscriptionModel> _subscriptions;
+    private readonly Dictionary<string, PushSubscriptionModel> _subscriptions;
     private readonly PushServiceClient _pushClient;
     private readonly ILogger<PushNotificationService> _logger;
 
-    public IReadOnlyCollection<PushSubscriptionModel> Subscriptions => _subscriptions.AsReadOnly();
+    public IReadOnlyCollection<PushSubscriptionModel> Subscriptions => _subscriptions.Values;
 
     public PushNotificationService(IConfiguration configuration, ILogger<PushNotificationService> logger)
     {
-        _subscriptions = new List<PushSubscriptionModel>();
+        _subscriptions = new Dictionary<string, PushSubscriptionModel>();
         _pushClient = new PushServiceClient();
         _logger = logger;
 
@@ -27,12 +27,15 @@ public class PushNotificationService
 
     public void AddSubscription(PushSubscriptionModel subscription)
     {
-        _subscriptions.Add(subscription);
+        if (_subscriptions.ContainsKey(subscription.Endpoint))
+            _subscriptions.Remove(subscription.Endpoint);
+
+        _subscriptions.Add(subscription.Endpoint, subscription);
     }
 
     public async Task SendNotificationAsync(NotificationPayloadModel payload)
     {
-        foreach (var subscription in _subscriptions)
+        foreach (var subscription in _subscriptions.Values)
         {
             var pushSubscription = new PushSubscription
             {
