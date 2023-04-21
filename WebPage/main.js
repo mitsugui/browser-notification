@@ -18,12 +18,18 @@ document.getElementById('subscribe').addEventListener('click', async () => {
           userVisibleOnly: true,
           applicationServerKey: vapidPublicKeyUint8Array
         });
+        
+        const subscriptionMessage = {
+          url: subscription.endpoint,
+          p256dh: subscription.getKey('p256dh'),
+          auth: subscription.getKey('auth')
+        };
   
         // Enviar a inscrição para o seu servidor
         const response = await fetch('https://notificacao-windows.azurewebsites.net/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(subscription)
+          body: JSON.stringify(subscriptionMessage)
         });
   
         if (!response.ok) {
