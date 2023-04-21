@@ -41,7 +41,11 @@ public class PushNotificationService
             pushSubscription.SetKey(PushEncryptionKeyName.P256DH, subscription.Keys.P256dh);
             pushSubscription.SetKey(PushEncryptionKeyName.Auth, subscription.Keys.Auth);
 
-            var pushMessage = new PushMessage(JsonSerializer.Serialize(payload))
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            var pushMessage = new PushMessage(JsonSerializer.Serialize(payload, options))
             {
                 Urgency = PushMessageUrgency.Normal
             };

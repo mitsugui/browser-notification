@@ -20,11 +20,13 @@ app.MapGet("/subscriptions", (PushNotificationService servico) => servico.Subscr
 //Adiciona inscrito
 app.MapPost("/subscribe", (PushSubscriptionModel model, PushNotificationService servico) => {
     servico.AddSubscription(model);
+    return Results.Ok();
 });
 
 //Envia notificação
 app.MapPost("/send", async (NotificationPayloadModel payload, PushNotificationService servico) => {
     await servico.SendNotificationAsync(payload);
+    return Results.Ok();
 });
 
 app.Run();
