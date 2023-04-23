@@ -21,8 +21,8 @@ document.getElementById('subscribe').addEventListener('click', async () => {
 
         const serviceSubscription = {
           endpoint: subscription.endpoint,
-          p256dh: subscription.getKey("p256dh"),
-          auth: subscription.getKey("auth"),
+          p256dh: new Uint8Array(subscription.getKey("p256dh")),
+          auth: new Uint8Array(subscription.getKey("auth")),
           subject: document.getElementById("subject").value
         };
 
