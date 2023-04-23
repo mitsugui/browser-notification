@@ -21,8 +21,8 @@ document.getElementById('subscribe').addEventListener('click', async () => {
 
         const serviceSubscription = {
           endpoint: subscription.endpoint,
-          p256dh: new Uint8Array(subscription.getKey("p256dh")),
-          auth: new Uint8Array(subscription.getKey("auth")),
+          p256dh: arrayBufferToBase64url(subscription.getKey("p256dh")),
+          auth: arrayBufferToBase64url(subscription.getKey("auth")),
           subject: document.getElementById("subject").value
         };
 
@@ -56,4 +56,18 @@ function urlBase64ToUint8Array(base64String) {
     outputArray[i] = rawData.charCodeAt(i);
   }
   return outputArray;
+}
+
+function arrayBufferToBase64url(buffer) {
+  var bytes = new Uint8Array(buffer);
+  var binaryString = String.fromCharCode.apply(null, bytes);
+  const base64String = btoa(binaryString);
+  
+  // Converter string Base64 para URL Base64
+  const urlBase64String = base64String
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+
+  return urlBase64String;
 }
