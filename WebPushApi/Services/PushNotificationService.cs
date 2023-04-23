@@ -37,7 +37,7 @@ public class PushNotificationService
     {
         foreach (var subscription in _subscriptions.Values)
         {
-            if (string.Equals(subscription.Subject, payload.Subject,
+            if (!string.Equals(subscription.Subject, payload.Subject,
                 StringComparison.OrdinalIgnoreCase)) continue;
 
             var pushSubscription = new PushSubscription
