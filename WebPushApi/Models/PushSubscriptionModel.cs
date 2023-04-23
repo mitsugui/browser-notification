@@ -1,3 +1,1 @@
-public record SubscriptionKeys(string P256dh, string Auth);
-
-public record PushSubscriptionModel(string Endpoint, SubscriptionKeys Keys);
+public record PushSubscriptionModel(string Endpoint, string P256dh, string Auth, string Subject);

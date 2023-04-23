@@ -1,1 +1,1 @@
-public record NotificationPayloadModel(string Title, string Body);
+public record NotificationPayloadModel(string Title, string Body, string Subject);

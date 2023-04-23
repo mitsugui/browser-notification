@@ -37,12 +37,15 @@ public class PushNotificationService
     {
         foreach (var subscription in _subscriptions.Values)
         {
+            if (string.Equals(subscription.Subject, payload.Subject,
+                StringComparison.OrdinalIgnoreCase)) continue;
+
             var pushSubscription = new PushSubscription
             {
                 Endpoint = subscription.Endpoint
             };
-            pushSubscription.SetKey(PushEncryptionKeyName.P256DH, subscription.Keys.P256dh);
-            pushSubscription.SetKey(PushEncryptionKeyName.Auth, subscription.Keys.Auth);
+            pushSubscription.SetKey(PushEncryptionKeyName.P256DH, subscription.P256dh);
+            pushSubscription.SetKey(PushEncryptionKeyName.Auth, subscription.Auth);
 
             var options = new JsonSerializerOptions
             {
