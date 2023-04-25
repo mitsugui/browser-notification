@@ -4,15 +4,13 @@ using Lib.Net.Http.WebPush.Authentication;
 
 public class PushNotificationService
 {
-    private readonly Dictionary<string, PushSubscriptionModel> _subscriptions;
     private readonly PushServiceClient _pushClient;
     private readonly ILogger<PushNotificationService> _logger;
+    private readonly IPushSubscriptionRepository _subscriptionRepository;
 
-    public IReadOnlyCollection<PushSubscriptionModel> Subscriptions => _subscriptions.Values;
-
-    public PushNotificationService(IConfiguration configuration, ILogger<PushNotificationService> logger)
+    public PushNotificationService(IConfiguration configuration, IPushSubscriptionRepository subscriptionRepository, ILogger<PushNotificationService> logger)
     {
-        _subscriptions = new Dictionary<string, PushSubscriptionModel>();
+        _subscriptionRepository = subscriptionRepository;
         _pushClient = new PushServiceClient();
         _logger = logger;
 
@@ -27,15 +25,15 @@ public class PushNotificationService
 
     public void AddSubscription(PushSubscriptionModel subscription)
     {
-        if (_subscriptions.ContainsKey(subscription.Endpoint))
-            _subscriptions.Remove(subscription.Endpoint);
-
-        _subscriptions.Add(subscription.Endpoint, subscription);
+        var item = _subscriptionRepository.GetSubscriptionAsync(subscription.Endpoint);
+        if(item != null) _subscriptionRepository.RemoveSubscriptionAsync(subscription.Id, subscription.Endpoint);
+        _subscriptionRepository.AddSubscriptionAsync(subscription);
     }
 
     public async Task SendNotificationAsync(NotificationPayloadModel payload)
     {
-        foreach (var subscription in _subscriptions.Values)
+        var subscriptions = await _subscriptionRepository.GetSubscriptionsBySubjectAsync(payload.Subject);
+        foreach (var subscription in subscriptions)
         {
             if (!string.Equals(subscription.Subject, payload.Subject,
                 StringComparison.OrdinalIgnoreCase)) continue;
@@ -66,5 +64,10 @@ public class PushNotificationService
                 _logger.LogError(ex, "Erro ao enviar notificação");
             }
         }
+    }
+
+    public async Task<IEnumerable<PushSubscriptionModel>> GetSubscriptionsAsync()
+    {
+        return await _subscriptionRepository.GetSubscriptionsAsync();
     }
 }

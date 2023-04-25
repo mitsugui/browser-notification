@@ -1,1 +1,6 @@
-public record NotificationPayloadModel(string Title, string Body, string Subject);
+using Newtonsoft.Json;
+
+public record NotificationPayloadModel(
+    [property:JsonProperty(PropertyName = "title")] string Title, 
+    [property:JsonProperty(PropertyName = "body")] string Body, 
+    [property:JsonProperty(PropertyName = "subject")] string Subject);
