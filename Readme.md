@@ -5,3 +5,4 @@ Para publicar a API:
 2. Publicar a aplicação: `dotnet publish -c Release -o ./bin/Publish`
 3. Clicar com botão direito sobre a pasta WebPushApi/bin/Publish
 4. Selecionar a opção `Deploy to Web App...`
+5. Teste
