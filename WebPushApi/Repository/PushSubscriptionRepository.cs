@@ -50,8 +50,8 @@ public class PushSubscriptionRepository : IPushSubscriptionRepository
         );
 
         var container = client.GetDatabase("BancoDados").GetContainer("Inscricoes");
-        var query = new QueryDefinition("SELECT * FROM i WHERE i.subject like '@subject%'")
-            .WithParameter("@subject", subject);
+        var query = new QueryDefinition("SELECT * FROM i WHERE i.subject like @expression")
+            .WithParameter("@expression", $"{subject}%");
 
         using var feed = container.GetItemQueryIterator<PushSubscriptionModel>(query);
 
