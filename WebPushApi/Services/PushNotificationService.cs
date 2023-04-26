@@ -30,14 +30,11 @@ public class PushNotificationService
         _subscriptionRepository.AddSubscriptionAsync(subscription);
     }
 
-    public async Task SendNotificationAsync(NotificationPayloadModel payload)
+    public async Task<IEnumerable<PushSubscriptionModel>> SendNotificationAsync(NotificationPayloadModel payload)
     {
         var subscriptions = await _subscriptionRepository.GetSubscriptionsBySubjectAsync(payload.Subject);
         foreach (var subscription in subscriptions)
         {
-            if (!string.Equals(subscription.Subject, payload.Subject,
-                StringComparison.OrdinalIgnoreCase)) continue;
-
             var pushSubscription = new PushSubscription
             {
                 Endpoint = subscription.Endpoint
@@ -64,6 +61,7 @@ public class PushNotificationService
                 _logger.LogError(ex, "Erro ao enviar notificação");
             }
         }
+        return subscriptions;
     }
 
     public async Task<IEnumerable<PushSubscriptionModel>> GetSubscriptionsAsync()

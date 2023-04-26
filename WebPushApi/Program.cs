@@ -27,8 +27,8 @@ app.MapPost("/subscribe", (PushSubscriptionModel model, PushNotificationService 
 
 //Envia notificação
 app.MapPost("/send", async (NotificationPayloadModel payload, PushNotificationService servico) => {
-    await servico.SendNotificationAsync(payload);
-    return Results.Ok();
+    var subscriptions = await servico.SendNotificationAsync(payload);
+    return Results.Ok(subscriptions);
 });
 
 app.Run();
